@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSVV Tech Quiz</title>
+    <!-- Google Fonts: Fira Code for a computer science look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <main class="app-container">
+        
+        <!-- Registration Screen -->
+        <section id="auth-screen" class="view active">
+            <header>
+                <h1 class="glitch" data-text="DEV SANSKRITI VISHWAVIDYALAYA">DEV SANSKRITI VISHWAVIDYALAYA</h1>
+                <h2><span class="highlight">Tech Assessment Portal</span></h2>
+                <p>Please enter your details to begin the quiz.</p>
+            </header>
+
+            <form id="registration-form">
+                <div class="input-group">
+                    <label for="student-name" class="req-label">Name</label>
+                    <input type="text" id="student-name" placeholder="Enter your full name" required autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="scholar-number" class="req-label">Scholar Number</label>
+                    <input type="text" id="scholar-number" placeholder="E.g., 2023001" pattern="\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="course-name" class="req-label">Course</label>
+                    <select id="course-name" required>
+                        <option value="" disabled selected>Select your course</option>
+                        <option value="BCA">BCA (Bachelor of Computer Applications)</option>
+                        <option value="BSc IT">BSc IT</option>
+                        <option value="MCA">MCA (Master of Computer Applications)</option>
+                        <option value="MSc CS">MSc Computer Science</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn primary-btn cyber-glitch-obj">
+                    > Initialize_Quiz()
+                </button>
+            </form>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quiz-screen" class="view hidden">
+            <header class="quiz-header">
+                <div class="student-info">
+                    <span id="display-name">User</span> | <span id="display-scholar">ID</span>
+                </div>
+                <div class="timer-container">
+                    <span class="timer-text" id="timer-text">00:20</span>
+                </div>
+                <div class="progress-container">
+                    <span id="question-tracker">Question 1 / 30</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="question-container">
+                <h3 id="question-text" class="question-text">Loading question...</h3>
+                <div class="code-snippet-container hidden" id="code-snippet-container">
+                    <pre><code id="code-snippet-text"></code></pre>
+                </div>
+            </div>
+
+            <div class="options-container" id="options-container">
+                <!-- Options injected via JS -->
+            </div>
+            
+            <div class="quiz-footer">
+                <button type="button" id="next-btn" class="btn secondary-btn hidden">
+                    Next_Question >
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section id="result-screen" class="view hidden">
+            <header>
+                <h2 class="glitch" data-text="ASSESSMENT COMPLETE">ASSESSMENT COMPLETE</h2>
+            </header>
+            
+            <div class="results-card">
+                <div class="score-circle">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg"
+                        d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle" id="score-circle-path"
+                        stroke-dasharray="0, 100"
+                        d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <text x="18" y="20.35" class="percentage" id="final-score-text">0/30</text>
+                    </svg>
+                </div>
+                
+                <h3 id="result-feedback">Evaluating...</h3>
+                <div class="stats">
+                    <p>Accuracy: <span class="highlight" id="accuracy-text">0%</span></p>
+                </div>
+                <p id="submission-status" style="margin-top: 15px; font-size: 0.9em; color: var(--neon-blue); height: 20px;"></p>
+            </div>
+
+            <button type="button" class="btn primary-btn" id="restart-btn">
+                > Reboot_System()
+            </button>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
