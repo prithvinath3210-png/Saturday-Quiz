@@ -56,16 +56,12 @@ let timeLeft = 20;
 const views = {
     auth: document.getElementById('auth-screen'),
     quiz: document.getElementById('quiz-screen'),
-    result: document.getElementById('result-screen'),
-    leaderboard: document.getElementById('leaderboard-screen')
+    result: document.getElementById('result-screen')
 };
 
 const form = document.getElementById('registration-form');
 const nextBtn = document.getElementById('next-btn');
 const restartBtn = document.getElementById('restart-btn');
-const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
-const backToResultsBtn = document.getElementById('back-to-results-btn');
-const leaderboardBody = document.getElementById('leaderboard-body');
 
 const dName = document.getElementById('display-name');
 const dScholar = document.getElementById('display-scholar');
@@ -292,74 +288,3 @@ restartBtn.addEventListener('click', () => {
     switchView('auth');
     document.getElementById('score-circle-path').style.strokeDasharray = `0, 100`;
 });
-
-// Leaderboard Logic
-if (viewLeaderboardBtn) {
-    viewLeaderboardBtn.addEventListener('click', () => {
-        switchView('leaderboard');
-        fetchLeaderboard();
-    });
-}
-
-if (backToResultsBtn) {
-    backToResultsBtn.addEventListener('click', () => {
-        switchView('result');
-    });
-}
-
-async function fetchLeaderboard() {
-    if (!leaderboardBody) return;
-    leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Fetching data from uplink... <span class="spinner"></span></td></tr>';
-    
-    const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1xFSjhb-PTwfmFuWJ6RkS2oOxMoN43cev1Ehr1CylZ9s/gviz/tq?tqx=out:csv";
-
-    try {
-        const response = await fetch(sheetCsvUrl);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const text = await response.text();
-        
-        const rows = text.split('\\n').filter(row => row.trim().length > 0);
-        rows.shift(); // Remove header
-
-        let parsedData = rows.map(row => {
-            const columns = row.split(',').map(item => item.replace(/(^"|"$)/g, '').trim());
-            let scoreValue = 0;
-            if (columns[4]) {
-                const parts = columns[4].split('/');
-                scoreValue = parseInt(parts[0], 10) || 0;
-            }
-            return {
-                name: columns[1] || 'Unknown',
-                course: columns[3] || '-',
-                scoreStr: columns[4] || '0/30',
-                scoreVal: scoreValue
-            };
-        });
-
-        parsedData.sort((a, b) => b.scoreVal - a.scoreVal);
-
-        leaderboardBody.innerHTML = '';
-        if (parsedData.length === 0) {
-            leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No records found.</td></tr>';
-            return;
-        }
-
-        parsedData.forEach((data, idx) => {
-            const tr = document.createElement('tr');
-            if (idx === 0) tr.classList.add('rank-1');
-            else if (idx === 1) tr.classList.add('rank-2');
-            else if (idx === 2) tr.classList.add('rank-3');
-
-            tr.innerHTML = `
-                <td>#${idx + 1}</td>
-                <td>${data.name}</td>
-                <td>${data.course}</td>
-                <td>${data.scoreStr}</td>
-            `;
-            leaderboardBody.appendChild(tr);
-        });
-    } catch (err) {
-        console.error("Error fetching leaderboard: ", err);
-        leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: var(--danger);">Failed to connect to global network.</td></tr>';
-    }
-}
