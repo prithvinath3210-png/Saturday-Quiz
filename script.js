@@ -311,7 +311,7 @@ async function fetchLeaderboard() {
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Fetching data from uplink... <span class="spinner"></span></td></tr>';
     
-    const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1xFSjhb-PTwfmFuWJ6RkS2oOxMoN43cev1Ehr1CylZ9s/export?format=csv";
+    const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1xFSjhb-PTwfmFuWJ6RkS2oOxMoN43cev1Ehr1CylZ9s/gviz/tq?tqx=out:csv";
 
     try {
         const response = await fetch(sheetCsvUrl);
